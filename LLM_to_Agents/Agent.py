@@ -84,7 +84,7 @@ messages = [{
 }]
 
 while True:
-
+    
     user_query = input("> ")
     messages.append({
     "role":"user",
