@@ -4,3 +4,6 @@
 
 - After these commands , Go to Browser - localhost:8000 and see the FastApi Interface and Play with it .
 
+
+
+Note - If u have a good GPU laptop then use the best open source agents and experiment with that .
