@@ -1,0 +1,44 @@
+﻿services:
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: vectorless-ollama
+    restart: unless-stopped
+
+    ports:
+      - "11434:11434"
+
+    volumes:
+      - ollama_data:/root/.ollama
+
+    environment:
+      OLLAMA_HOST: "0.0.0.0:11434"
+
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: vectorless-app
+
+    working_dir: /workspace
+
+    volumes:
+      - ./:/workspace
+
+    environment:
+      OPENAI_API_KEY: "ollama"
+      OPENAI_BASE_URL: "http://ollama:11434/v1"
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      PAGEINDEX_MODEL: "openai/qwen3:4b-instruct-2507-q4_K_M"
+      PAGEINDEX_STORAGE: "/workspace/data/pageindex"
+
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+volumes:
+  ollama_data:
